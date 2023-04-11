@@ -1,26 +1,51 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
+import CatalogView from '@/views/CatalogView.vue';
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView,
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
-  },
+  { path: '/', name: 'catalog', component: CatalogView },
+  // {
+  //   path: '/product/:id',
+  //   name: 'product',
+  //   component: () => import('@/views/ProductView.vue'), // ленивая загрузка
+  // },
+  // {
+  //   path: '/cart',
+  //   name: 'cart',
+  //   component: () => import('@/views/CartView.vue'),
+  // },
+  // {
+  //   path: '/order/',
+  //   name: 'order',
+  //   component: () => import('@/views/OrderView.vue'),
+  // },
+  // {
+  //   path: '/order/:id',
+  //   name: 'orderInfo',
+  //   component: () => import('@/views/OrderInfoView.vue'),
+  // },
+  // {
+  //   path: '/*',
+  //   name: 'notFound',
+  //   component: () => import('@/views/NotFoundView.vue'),
+  // },
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(process.env.BASE_URL), // ! ОБЯЗАТЕЛЬНО в адрес для статичных ресурсов (напр., link:css в index.html) подставлять <%= BASE_URL %>
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    // возвращаем требуемую позицию прокрутки
+    if (to.hash) {
+      return {
+        selector: to.hash,
+        behavior: 'smooth',
+      };
+    }
+    if (savedPosition) {
+      return savedPosition;
+    }
+    return { x: 0, y: 0 };
+  },
 });
 
 export default router;
