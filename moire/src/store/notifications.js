@@ -1,7 +1,7 @@
 export const moduleNotifications = {
   state: () => ({
     messages: [],
-    messagesTimeout: 44000,
+    messagesTimeout: 4000,
   }),
   getters: {
     // ? уведомления - список

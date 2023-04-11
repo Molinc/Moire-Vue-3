@@ -3,7 +3,7 @@
     <!-- окно уведомлений -->
     <BaseNotification />
 
-    <!-- <header class="header container">
+    <header class="header container">
       <div class="header__wrapper">
         <span class="header__info">Каталог</span>
 
@@ -125,7 +125,7 @@
           © {{ new Date().getFullYear() }} Moire
         </span>
       </div>
-    </footer> -->
+    </footer>
   </div>
 </template>
 
@@ -140,13 +140,13 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex';
-// import CartIndicator from './components/cart/CartIndicator.vue';
+import CartIndicator from './components/cart/CartIndicator.vue';
 import BaseNotification from '@/components/notifications/BaseNotification.vue';
 
 export default {
   name: 'App',
   components: {
-    // CartIndicator,
+    CartIndicator,
     BaseNotification,
   },
   methods: {
@@ -160,7 +160,7 @@ export default {
       this.updateUserAccessKey(userAccessKey);
     }
     // загрузка корзины под пользователя
-    // this.loadCart();
+    this.loadCart();
   },
 };
 </script>

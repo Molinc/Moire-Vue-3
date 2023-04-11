@@ -8,11 +8,11 @@ const routes = [
   //   name: 'product',
   //   component: () => import('@/views/ProductView.vue'), // ленивая загрузка
   // },
-  // {
-  //   path: '/cart',
-  //   name: 'cart',
-  //   component: () => import('@/views/CartView.vue'),
-  // },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: () => import('@/views/CartView.vue'),
+  },
   // {
   //   path: '/order/',
   //   name: 'order',
