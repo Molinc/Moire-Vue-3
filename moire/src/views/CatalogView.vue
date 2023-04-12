@@ -1,26 +1,26 @@
 <template>
   <main class="content container">
-    <!-- <div class="content__top">
+    <div class="content__top">
       <div class="content__row">
         <h1 class="content__title">Каталог</h1>
         <span class="content__info">
-          {{ countProducts | countProductsString }}
+          {{ countProductsString(countProducts) }}
         </span>
       </div>
     </div>
 
     <div class="content__catalog">
       <ProductFilter
-        :price-from.sync="filterPriceFrom"
-        :price-to.sync="filterPriceTo"
-        :category-id.sync="filterCategoryId"
-        :material-ids.sync="filterMaterialIds"
-        :season-ids.sync="filterSeasonIds"
-        :color-ids.sync="filterColorIds"
-        :page.sync="page"
+        v-model:price-from="filterPriceFrom"
+        v-model:price-to="filterPriceTo"
+        v-model:category-id="filterCategoryId"
+        v-model:material-ids="filterMaterialIds"
+        v-model:season-ids="filterSeasonIds"
+        v-model:color-ids="filterColorIds"
+        v-model:page="page"
       />
 
-      <section class="catalog">
+      <!-- <section class="catalog">
         <PageProductsSelect :value.sync="productsPerPage" />
 
         <Spinner :visible="productsLoading" size="large" />
@@ -28,8 +28,8 @@
         <ProductList :products="products" />
 
         <BasePagination v-model="page" :pages="countPages" />
-      </section>
-    </div> -->
+      </section>-->
+    </div>
   </main>
 </template>
 
@@ -37,64 +37,64 @@
 // import { countProductsString } from '@/helpers/productCounters';
 // import ProductList from '@/components/products/ProductList.vue';
 // import BasePagination from '@/components/base/BasePagination.vue';
-// import ProductFilter from '@/components/products/ProductFilter.vue';
+import ProductFilter from '@/components/products/ProductFilter.vue';
 // import Spinner from '@/components/base/BaseSpinner.vue';
 // import { errors } from '@/mixins/dictsMixin.js';
 // import PageProductsSelect from '@/components/products/selects/PageProductsSelect.vue';
 // import { mapActions, mapGetters } from 'vuex';
 // import { apiLoadProducts } from '@/api/api.js';
+import functions from '@/mixins/functionsMixin';
 
 export default {
   name: 'CatalogView',
-  // props: [],
-  // data() {
-  //   return {
-  //     productsData: null,
-  //     productsLoading: false, // статус загрузки страницы
-  //     productsLoadingFailed: false, // ошибка при загрузке страницы
-  //     productsLoadingErrorCode: null,
-  //     filterPriceFrom: 0,
-  //     filterPriceTo: 0,
-  //     filterCategoryId: this.$route.params.categoryId || 0,
-  //     filterMaterialIds: [],
-  //     filterSeasonIds: [],
-  //     filterColorIds: [],
-  //     page: 1,
-  //   };
-  // },
-  // computed: {
-  //   ...mapGetters(['productsPerPageSaved']),
+  data() {
+    return {
+      productsData: null,
+      //     productsLoading: false, // статус загрузки страницы
+      //     productsLoadingFailed: false, // ошибка при загрузке страницы
+      //     productsLoadingErrorCode: null,
+      filterPriceFrom: 0,
+      filterPriceTo: 0,
+      filterCategoryId: this.$route.params.categoryId || 0,
+      filterMaterialIds: [],
+      filterSeasonIds: [],
+      filterColorIds: [],
+      page: 1,
+    };
+  },
+  computed: {
+    //   ...mapGetters(['productsPerPageSaved']),
 
-  //   products() {
-  //     // при первой отрисовке ничего не выведется, т.к. загрузка занимает время, поэтому возвращаем поначалу пустой массив,
-  //     // а уже после загрузки он снова перерисуется в список товаров
-  //     return (this.productsData?.items ?? []).map((item) => {
-  //       const product = {
-  //         ...item,
-  //         // ! -----> наличие продукта разных цветов и размеров в корзине
-  //         itemsAdded: this.cartProductItems(item.id),
-  //       };
-  //       return product;
-  //     });
-  //   },
-  //   countProducts() {
-  //     return this.productsData ? this.productsData.pagination.total : 0;
-  //   },
-  //   countPages() {
-  //     return this.productsData?.pagination?.pages ?? 1;
-  //   },
-  //   productsPerPage: {
-  //     get() {
-  //       return this.productsPerPageSaved;
-  //     },
-  //     set(value) {
-  //       this.$store.commit('saveProductsPerPage', value);
-  //     },
-  //   },
-  //   ...mapGetters({
-  //     cartProducts: 'cartProducts',
-  //   }),
-  // },
+    //   products() {
+    //     // при первой отрисовке ничего не выведется, т.к. загрузка занимает время, поэтому возвращаем поначалу пустой массив,
+    //     // а уже после загрузки он снова перерисуется в список товаров
+    //     return (this.productsData?.items ?? []).map((item) => {
+    //       const product = {
+    //         ...item,
+    //         // ! -----> наличие продукта разных цветов и размеров в корзине
+    //         itemsAdded: this.cartProductItems(item.id),
+    //       };
+    //       return product;
+    //     });
+    //   },
+    countProducts() {
+      return this.productsData ? this.productsData.pagination.total : 0;
+    },
+    //   countPages() {
+    //     return this.productsData?.pagination?.pages ?? 1;
+    //   },
+    //   productsPerPage: {
+    //     get() {
+    //       return this.productsPerPageSaved;
+    //     },
+    //     set(value) {
+    //       this.$store.commit('saveProductsPerPage', value);
+    //     },
+    //   },
+    //   ...mapGetters({
+    //     cartProducts: 'cartProducts',
+    //   }),
+  },
   // methods: {
   //   ...mapActions(['addNotification']),
 
@@ -159,13 +159,13 @@ export default {
   //     }, 500);
   //   },
   // },
-  // components: {
-  //   ProductList,
-  //   BasePagination,
-  //   ProductFilter,
-  //   Spinner,
-  //   PageProductsSelect,
-  // },
+  components: {
+    //   ProductList,
+    //   BasePagination,
+    ProductFilter,
+    //   Spinner,
+    //   PageProductsSelect,
+  },
   // watch: {
   //   page() {
   //     this.loadProducts();
@@ -202,5 +202,55 @@ export default {
   // mounted() {
   //   this.loadProducts();
   // },
+  mixins: [functions],
+  watch: {
+    filterPriceFrom(val, oldVal) {
+      console.log('изменилась "цена от" c ' + oldVal + ' на ' + val);
+    },
+    filterPriceTo(val, oldVal) {
+      console.log('изменилась "цена по" c ' + oldVal + ' на ' + val);
+    },
+    filterCategoryId(val, oldVal) {
+      console.log('изменилась категория c ' + oldVal + ' на ' + val);
+    },
+    filterMaterialIds: {
+      handler(val, oldVal) {
+        console.log(
+          'изменились материалы с ' +
+            JSON.stringify(oldVal) +
+            ' на ' +
+            JSON.stringify(val),
+        );
+      },
+      deep: true,
+    },
+    filterSeasonIds: {
+      handler(val, oldVal) {
+        console.log(
+          'изменились сезоны с ' +
+            JSON.stringify(oldVal) +
+            ' на ' +
+            JSON.stringify(val),
+        );
+      },
+      deep: true,
+    },
+    filterColorIds: {
+      handler(val, oldVal) {
+        console.log(
+          'изменились цвета с ' +
+            JSON.stringify(oldVal) +
+            ' на ' +
+            JSON.stringify(val),
+        );
+      },
+      deep: true,
+    },
+    page(val, oldVal) {
+      console.log(
+        'изменился номер текущей страницы c ' + oldVal + ' на ' + val,
+      );
+    },
+  },
 };
 </script>
