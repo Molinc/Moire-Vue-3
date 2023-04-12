@@ -20,28 +20,27 @@
         v-model:page="page"
       />
 
-      <!-- <section class="catalog">
-        <PageProductsSelect :value.sync="productsPerPage" />
+      <section class="catalog">
+        <PageProductsSelect v-model="productsPerPage" />
 
         <Spinner :visible="productsLoading" size="large" />
 
-        <ProductList :products="products" />
+        <!-- <ProductList :products="products" />
 
-        <BasePagination v-model="page" :pages="countPages" />
-      </section>-->
+        <BasePagination v-model="page" :pages="countPages" /> -->
+      </section>
     </div>
   </main>
 </template>
 
 <script>
-// import { countProductsString } from '@/helpers/productCounters';
 // import ProductList from '@/components/products/ProductList.vue';
 // import BasePagination from '@/components/base/BasePagination.vue';
 import ProductFilter from '@/components/products/ProductFilter.vue';
-// import Spinner from '@/components/base/BaseSpinner.vue';
+import PageProductsSelect from '@/components/products/selects/PageProductsSelect.vue';
+import Spinner from '@/components/base/BaseSpinner.vue';
 // import { errors } from '@/mixins/dictsMixin.js';
-// import PageProductsSelect from '@/components/products/selects/PageProductsSelect.vue';
-// import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'; // ! еще надо mapActions
 // import { apiLoadProducts } from '@/api/api.js';
 import functions from '@/mixins/functionsMixin';
 
@@ -50,9 +49,9 @@ export default {
   data() {
     return {
       productsData: null,
-      //     productsLoading: false, // статус загрузки страницы
-      //     productsLoadingFailed: false, // ошибка при загрузке страницы
-      //     productsLoadingErrorCode: null,
+      productsLoading: false,
+      productsLoadingFailed: false,
+      productsLoadingErrorCode: null,
       filterPriceFrom: 0,
       filterPriceTo: 0,
       filterCategoryId: this.$route.params.categoryId || 0,
@@ -63,7 +62,7 @@ export default {
     };
   },
   computed: {
-    //   ...mapGetters(['productsPerPageSaved']),
+    ...mapGetters(['productsPerPageSaved']),
 
     //   products() {
     //     // при первой отрисовке ничего не выведется, т.к. загрузка занимает время, поэтому возвращаем поначалу пустой массив,
@@ -83,14 +82,15 @@ export default {
     //   countPages() {
     //     return this.productsData?.pagination?.pages ?? 1;
     //   },
-    //   productsPerPage: {
-    //     get() {
-    //       return this.productsPerPageSaved;
-    //     },
-    //     set(value) {
-    //       this.$store.commit('saveProductsPerPage', value);
-    //     },
-    //   },
+    productsPerPage: {
+      get() {
+        return this.productsPerPageSaved;
+      },
+      set(value) {
+        // console.log(`новое значение productsPerPage = ${value}`);
+        this.$store.commit('saveProductsPerPage', value);
+      },
+    },
     //   ...mapGetters({
     //     cartProducts: 'cartProducts',
     //   }),
@@ -163,8 +163,8 @@ export default {
     //   ProductList,
     //   BasePagination,
     ProductFilter,
-    //   Spinner,
-    //   PageProductsSelect,
+    Spinner,
+    PageProductsSelect,
   },
   // watch: {
   //   page() {
