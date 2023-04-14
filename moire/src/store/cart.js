@@ -14,6 +14,12 @@ export const moduleCart = {
     cartLoadingFailed: false,
   }),
   getters: {
+    cartLoading(state) {
+      return state.cartLoading;
+    },
+    cartLoadingFailed(state) {
+      return state.cartLoadingFailed;
+    },
     cartProducts(state) {
       return state.cartProducts;
     },
@@ -119,6 +125,11 @@ export const moduleCart = {
                 'updateUserAccessKey',
                 response.data.user.accessKey,
               );
+
+              context.dispatch('addNotification', {
+                text: 'Корзина пуста',
+                type: 'warning',
+              });
             }
             context.commit('updateCartProductsData', response.data.items);
             context.commit('syncCartProducts');

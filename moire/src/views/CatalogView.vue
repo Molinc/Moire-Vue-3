@@ -23,7 +23,7 @@
       <section class="catalog">
         <PageProductsSelect v-model="productsPerPage" />
 
-        <Spinner :visible="productsLoading" size="large" />
+        <SpinnerSpring :visible="productsLoading" size="medium" />
 
         <!-- <ProductList :products="products" />
 
@@ -38,7 +38,7 @@
 // import BasePagination from '@/components/base/BasePagination.vue';
 import ProductFilter from '@/components/products/ProductFilter.vue';
 import PageProductsSelect from '@/components/products/selects/PageProductsSelect.vue';
-import Spinner from '@/components/base/BaseSpinner.vue';
+import SpinnerSpring from '@/components/base/spinners/SpinnerSpring.vue';
 // import { errors } from '@/mixins/dictsMixin.js';
 import { mapGetters } from 'vuex'; // ! еще надо mapActions
 // import { apiLoadProducts } from '@/api/api.js';
@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       productsData: null,
-      productsLoading: false,
+      productsLoading: true,
       productsLoadingFailed: false,
       productsLoadingErrorCode: null,
       filterPriceFrom: 0,
@@ -163,8 +163,8 @@ export default {
     //   ProductList,
     //   BasePagination,
     ProductFilter,
-    Spinner,
     PageProductsSelect,
+    SpinnerSpring,
   },
   // watch: {
   //   page() {
@@ -204,6 +204,7 @@ export default {
   // },
   mixins: [functions],
   watch: {
+    // логирование
     filterPriceFrom(val, oldVal) {
       console.log('изменилась "цена от" c ' + oldVal + ' на ' + val);
     },

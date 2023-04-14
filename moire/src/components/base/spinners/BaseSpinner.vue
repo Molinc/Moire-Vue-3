@@ -1,11 +1,13 @@
 <template>
   <div class="spinner" :class="spinnerClass" v-if="visible">
-    <Spinner :size="size" line-fg-color="#222" />
+    <slot />
   </div>
 </template>
 
 <style lang="sass">
 .spinner
+  display: flex
+  justify-content: center
   margin-top: 10px
   text-align: center
 .spinner--tiny
@@ -21,8 +23,6 @@
 </style>
 
 <script>
-import Spinner from 'vue-simple-spinner';
-
 export default {
   name: 'BaseSpinner',
   props: ['visible', 'size'],
@@ -31,6 +31,5 @@ export default {
       return `spinner--${this.size}`;
     },
   },
-  components: { Spinner },
 };
 </script>

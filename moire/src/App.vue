@@ -140,7 +140,7 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex';
-import CartIndicator from './components/cart/CartIndicator.vue';
+import CartIndicator from '@/components/cart/CartIndicator.vue';
 import BaseNotification from '@/components/notifications/BaseNotification.vue';
 
 export default {
