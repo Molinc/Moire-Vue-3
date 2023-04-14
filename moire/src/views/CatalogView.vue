@@ -25,9 +25,9 @@
 
         <SpinnerSpring :visible="productsLoading" size="medium" />
 
-        <!-- <ProductList :products="products" />
+        <!-- <ProductList :products="products" /> -->
 
-        <BasePagination v-model="page" :pages="countPages" /> -->
+        <BasePagination v-model:page="page" :pages="countPages" />
       </section>
     </div>
   </main>
@@ -35,13 +35,13 @@
 
 <script>
 // import ProductList from '@/components/products/ProductList.vue';
-// import BasePagination from '@/components/base/BasePagination.vue';
+import BasePagination from '@/components/base/BasePagination.vue';
 import ProductFilter from '@/components/products/ProductFilter.vue';
 import PageProductsSelect from '@/components/products/selects/PageProductsSelect.vue';
 import SpinnerSpring from '@/components/base/spinners/SpinnerSpring.vue';
-// import { errors } from '@/mixins/dictsMixin.js';
-import { mapGetters } from 'vuex'; // ! еще надо mapActions
-// import { apiLoadProducts } from '@/api/api.js';
+import { errors } from '@/mixins/dictsMixin.js';
+import { mapGetters, mapActions } from 'vuex';
+import { apiLoadProducts } from '@/api/api.js';
 import functions from '@/mixins/functionsMixin';
 
 export default {
@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       productsData: null,
-      productsLoading: true,
+      productsLoading: false,
       productsLoadingFailed: false,
       productsLoadingErrorCode: null,
       filterPriceFrom: 0,
@@ -79,9 +79,9 @@ export default {
     countProducts() {
       return this.productsData ? this.productsData.pagination.total : 0;
     },
-    //   countPages() {
-    //     return this.productsData?.pagination?.pages ?? 1;
-    //   },
+    countPages() {
+      return this.productsData?.pagination?.pages ?? 1;
+    },
     productsPerPage: {
       get() {
         return this.productsPerPageSaved;
@@ -91,77 +91,77 @@ export default {
         this.$store.commit('saveProductsPerPage', value);
       },
     },
-    //   ...mapGetters({
-    //     cartProducts: 'cartProducts',
-    //   }),
+    ...mapGetters({
+      cartProducts: 'cartProducts',
+    }),
   },
-  // methods: {
-  //   ...mapActions(['addNotification']),
+  methods: {
+    ...mapActions(['addNotification']),
 
-  //   cartProductItems(productId) {
-  //     let items =
-  //       this.cartProducts?.filter((item) => {
-  //         return item.productId === productId;
-  //       }) ?? [];
+    //   cartProductItems(productId) {
+    //     let items =
+    //       this.cartProducts?.filter((item) => {
+    //         return item.productId === productId;
+    //       }) ?? [];
 
-  //     if (!items?.length) return [];
+    //     if (!items?.length) return [];
 
-  //     items = items.map((item) => {
-  //       return {
-  //         productId: item.productId,
-  //         colorId: item.colorId,
-  //         sizeId: item.sizeId,
-  //         quantity: item.amount,
-  //       };
-  //     });
+    //     items = items.map((item) => {
+    //       return {
+    //         productId: item.productId,
+    //         colorId: item.colorId,
+    //         sizeId: item.sizeId,
+    //         quantity: item.amount,
+    //       };
+    //     });
 
-  //     return items;
-  //   },
-  //   startLoading() {
-  //     this.productsLoading = true;
-  //     this.productsLoadingFailed = false;
-  //     clearTimeout(this.loadProductsTimer);
-  //   },
-  //   stopLoading() {
-  //     this.productsLoading = false;
-  //   },
-  //   // + notification
-  //   loadProducts(forcePage) {
-  //     this.startLoading();
-  //     // таймер для того, чтобы при изменении фильтров не вызывалась загрузка несколько раз подряд
-  //     this.loadProductsTimer = setTimeout(() => {
-  //       apiLoadProducts({
-  //         minPrice: this.filterPriceFrom,
-  //         maxPrice: this.filterPriceTo,
-  //         categoryId: this.filterCategoryId,
-  //         materialIds: this.filterMaterialIds,
-  //         seasonIds: this.filterSeasonIds,
-  //         colorIds: this.filterColorIds,
-  //         page: forcePage ?? this.page,
-  //         limit: this.productsPerPage,
-  //       })
-  //         .then((response) => {
-  //           this.productsData = response.data;
-  //         })
-  //         .catch((error) => {
-  //           this.productsLoadingErrorCode = error.response.status;
-  //           this.productsLoadingFailed = true;
-  //           console.log(error.response.statusText);
+    //     return items;
+    // },
+    startLoading() {
+      this.productsLoading = true;
+      this.productsLoadingFailed = false;
+      clearTimeout(this.loadProductsTimer);
+    },
+    stopLoading() {
+      this.productsLoading = false;
+    },
+    // + notification
+    loadProducts(forcePage) {
+      this.startLoading();
+      // таймер для того, чтобы при изменении фильтров не вызывалась загрузка несколько раз подряд
+      this.loadProductsTimer = setTimeout(() => {
+        apiLoadProducts({
+          minPrice: this.filterPriceFrom,
+          maxPrice: this.filterPriceTo,
+          categoryId: this.filterCategoryId,
+          materialIds: this.filterMaterialIds,
+          seasonIds: this.filterSeasonIds,
+          colorIds: this.filterColorIds,
+          page: forcePage ?? this.page,
+          limit: this.productsPerPage,
+        })
+          .then((response) => {
+            this.productsData = response.data;
+          })
+          .catch((error) => {
+            this.productsLoadingErrorCode = error.response.status;
+            this.productsLoadingFailed = true;
+            console.log(error.response.statusText);
 
-  //           this.addNotification({
-  //             text:
-  //               errors.find((item) => item.code == error.response.status)
-  //                 ?.caption ?? error.response.statusText,
-  //             type: 'error',
-  //           });
-  //         })
-  //         .finally(() => this.stopLoading());
-  //     }, 500);
-  //   },
-  // },
+            this.addNotification({
+              text:
+                errors.find((item) => item.code == error.response.status)
+                  ?.caption ?? error.response.statusText,
+              type: 'error',
+            });
+          })
+          .finally(() => this.stopLoading());
+      }, 500);
+    },
+  },
   components: {
     //   ProductList,
-    //   BasePagination,
+    BasePagination,
     ProductFilter,
     PageProductsSelect,
     SpinnerSpring,
@@ -197,10 +197,6 @@ export default {
   //       this.page = 1;
   //     }
   //   },
-  // },
-  // filters: { countProductsString },
-  // mounted() {
-  //   this.loadProducts();
   // },
   mixins: [functions],
   watch: {
@@ -251,7 +247,11 @@ export default {
       console.log(
         'изменился номер текущей страницы c ' + oldVal + ' на ' + val,
       );
+      this.loadProducts();
     },
+  },
+  mounted() {
+    this.loadProducts();
   },
 };
 </script>
