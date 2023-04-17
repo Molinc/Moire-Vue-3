@@ -25,7 +25,7 @@
 
         <SpinnerSpring :visible="productsLoading" size="medium" />
 
-        <!-- <ProductList :products="products" /> -->
+        <ProductList :products="products" />
 
         <BasePagination v-model:page="page" :pages="countPages" />
       </section>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-// import ProductList from '@/components/products/ProductList.vue';
+import ProductList from '@/components/products/ProductList.vue';
 import BasePagination from '@/components/base/BasePagination.vue';
 import ProductFilter from '@/components/products/ProductFilter.vue';
 import PageProductsSelect from '@/components/products/selects/PageProductsSelect.vue';
@@ -62,20 +62,23 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['productsPerPageSaved']),
+    ...mapGetters({
+      productsPerPageSaved: 'productsPerPageSaved',
+      cartProducts: 'cartProducts',
+    }),
 
-    //   products() {
-    //     // при первой отрисовке ничего не выведется, т.к. загрузка занимает время, поэтому возвращаем поначалу пустой массив,
-    //     // а уже после загрузки он снова перерисуется в список товаров
-    //     return (this.productsData?.items ?? []).map((item) => {
-    //       const product = {
-    //         ...item,
-    //         // ! -----> наличие продукта разных цветов и размеров в корзине
-    //         itemsAdded: this.cartProductItems(item.id),
-    //       };
-    //       return product;
-    //     });
-    //   },
+    products() {
+      // при первой отрисовке ничего не выведется, т.к. загрузка занимает время, поэтому возвращаем поначалу пустой массив,
+      // а уже после загрузки он снова перерисуется в список товаров
+      return (this.productsData?.items ?? []).map((item) => {
+        const product = {
+          ...item,
+          // ! -----> наличие продукта разных цветов и размеров в корзине
+          itemsAdded: this.cartProductItems(item.id),
+        };
+        return product;
+      });
+    },
     countProducts() {
       return this.productsData ? this.productsData.pagination.total : 0;
     },
@@ -91,32 +94,29 @@ export default {
         this.$store.commit('saveProductsPerPage', value);
       },
     },
-    ...mapGetters({
-      cartProducts: 'cartProducts',
-    }),
   },
   methods: {
     ...mapActions(['addNotification']),
 
-    //   cartProductItems(productId) {
-    //     let items =
-    //       this.cartProducts?.filter((item) => {
-    //         return item.productId === productId;
-    //       }) ?? [];
+    cartProductItems(productId) {
+      let items =
+        this.cartProducts?.filter((item) => {
+          return item.productId === productId;
+        }) ?? [];
 
-    //     if (!items?.length) return [];
+      if (!items?.length) return [];
 
-    //     items = items.map((item) => {
-    //       return {
-    //         productId: item.productId,
-    //         colorId: item.colorId,
-    //         sizeId: item.sizeId,
-    //         quantity: item.amount,
-    //       };
-    //     });
+      items = items.map((item) => {
+        return {
+          productId: item.productId,
+          colorId: item.colorId,
+          sizeId: item.sizeId,
+          quantity: item.amount,
+        };
+      });
 
-    //     return items;
-    // },
+      return items;
+    },
     startLoading() {
       this.productsLoading = true;
       this.productsLoadingFailed = false;
@@ -160,94 +160,87 @@ export default {
     },
   },
   components: {
-    //   ProductList,
+    ProductList,
     BasePagination,
     ProductFilter,
     PageProductsSelect,
     SpinnerSpring,
   },
-  // watch: {
-  //   page() {
-  //     this.loadProducts();
-  //   },
-  //   filterPriceFrom() {
-  //     this.loadProducts();
-  //   },
-  //   filterPriceTo() {
-  //     this.loadProducts();
-  //   },
-  //   filterCategoryId() {
-  //     this.loadProducts();
-  //   },
-  //   filterMaterialIds() {
-  //     this.loadProducts();
-  //   },
-  //   filterSeasonIds() {
-  //     this.loadProducts();
-  //   },
-  //   filterColorIds() {
-  //     this.loadProducts();
-  //   },
-  //   productsPerPage() {
-  //     if (this.page === 1) {
-  //       // если уже выбрана 1 стр, просто перезагружаем список
-  //       this.loadProducts();
-  //     } else {
-  //       // иначе просто меняем страницу (список перезагрузится)
-  //       this.page = 1;
-  //     }
-  //   },
-  // },
   mixins: [functions],
   watch: {
-    // логирование
     filterPriceFrom(val, oldVal) {
-      console.log('изменилась "цена от" c ' + oldVal + ' на ' + val);
+      this.loadProducts();
+
+      console.log('изменилась "цена от" c ' + oldVal + ' на ' + val); // логирование
     },
     filterPriceTo(val, oldVal) {
-      console.log('изменилась "цена по" c ' + oldVal + ' на ' + val);
+      this.loadProducts();
+
+      console.log('изменилась "цена по" c ' + oldVal + ' на ' + val); // логирование
     },
     filterCategoryId(val, oldVal) {
-      console.log('изменилась категория c ' + oldVal + ' на ' + val);
+      this.loadProducts();
+
+      console.log('изменилась категория c ' + oldVal + ' на ' + val); // логирование
     },
     filterMaterialIds: {
       handler(val, oldVal) {
+        this.loadProducts();
+
         console.log(
           'изменились материалы с ' +
             JSON.stringify(oldVal) +
             ' на ' +
             JSON.stringify(val),
-        );
+        ); // логирование
       },
       deep: true,
     },
     filterSeasonIds: {
       handler(val, oldVal) {
+        this.loadProducts();
+
         console.log(
           'изменились сезоны с ' +
             JSON.stringify(oldVal) +
             ' на ' +
             JSON.stringify(val),
-        );
+        ); // логирование
       },
       deep: true,
     },
     filterColorIds: {
       handler(val, oldVal) {
+        this.loadProducts();
+
         console.log(
           'изменились цвета с ' +
             JSON.stringify(oldVal) +
             ' на ' +
             JSON.stringify(val),
-        );
+        ); // логирование
       },
       deep: true,
     },
     page(val, oldVal) {
+      this.loadProducts();
+
       console.log(
         'изменился номер текущей страницы c ' + oldVal + ' на ' + val,
-      );
-      this.loadProducts();
+      ); // логирование
+    },
+    productsPerPage(val, oldVal) {
+      if (this.page === 1) {
+        // если уже выбрана 1 стр, просто перезагружаем список
+        this.loadProducts();
+      } else {
+        // иначе просто меняем страницу (список перезагрузится)
+        this.page = 1;
+      }
+
+      console.log(
+        'изменилось число продуктов на страницу с ' + oldVal + ' на ' + val,
+      ); // логирование
     },
   },
   mounted() {

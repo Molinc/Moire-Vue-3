@@ -3,11 +3,11 @@ import CatalogView from '@/views/CatalogView.vue';
 
 const routes = [
   { path: '/', name: 'catalog', component: CatalogView },
-  // {
-  //   path: '/product/:id',
-  //   name: 'product',
-  //   component: () => import('@/views/ProductView.vue'), // ленивая загрузка
-  // },
+  {
+    path: '/product/:id',
+    name: 'product',
+    component: () => import('@/views/ProductView.vue'), // ленивая загрузка
+  },
   {
     path: '/cart',
     name: 'cart',
