@@ -38,9 +38,9 @@
 
           <div class="item__row">
             <!-- цвет -->
-            <!-- <ColorsSelect :colors="product.colors" v-model:color="color" /> -->
+            <ColorsSelect :colors="product.colors" v-model:color="color" />
             <!-- размер -->
-            <!-- <SizesSelect :sizes="product.sizes" v-model:size="size" /> -->
+            <SizesSelect :sizes="product.sizes" v-model:size="size" />
           </div>
         </div>
       </section>
@@ -84,9 +84,9 @@ import functionsMixin from '@/mixins/functionsMixin';
 import { apiLoadProduct } from '@/api/api';
 import { errors } from '@/mixins/dictsMixin';
 // import BaseCounter from '@/components/base/BaseCounter.vue';
-// import ColorsSelect from '@/components/products/selects/ProductColorsSelect.vue';
-// import SizesSelect from '@/components/products/selects/ProductSizesSelect.vue';
-// import photosGallery from '@/helpers/colorsPhotosGallery';
+import ColorsSelect from '@/components/products/selects/ProductColorsSelect.vue';
+import SizesSelect from '@/components/products/selects/ProductSizesSelect.vue';
+import photosGallery from '@/helpers/colorsPhotosGallery';
 
 export default {
   name: 'PopupProductView',
@@ -109,7 +109,7 @@ export default {
     },
     photos() {
       if (!this.product?.colors?.length) return [];
-      return []; //photosGallery(this.product.colors, this.colorId);
+      return photosGallery(this.product.colors, this.colorId);
     },
     productGallery() {
       if (!this.product?.colors?.length) return [];
@@ -221,8 +221,8 @@ export default {
     SpinnerSpring,
     // ProductViewPhotos,
     // BaseCounter,
-    // ColorsSelect,
-    // SizesSelect,
+    ColorsSelect,
+    SizesSelect,
   },
   mixins: [functionsMixin],
   mounted() {

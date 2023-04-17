@@ -9,7 +9,7 @@
     />
 
     <!-- ! html-способ маршрутизации -->
-    <!-- TODO! отправляем цвет через state! учесть это на странице ProductView.vue! -->
+    <!-- TODO! все прочие параметры, не учитываемые в маршрутизаторе, в частности цвет, отправляем state! учесть это на странице ProductView.vue! -->
     <router-link
       class="catalog__link"
       :to="{ name: 'product', params: { id: product.id }, state: { color } }"
