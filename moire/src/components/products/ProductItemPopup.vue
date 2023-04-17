@@ -13,14 +13,14 @@
       />
       <section class="item item-popup__content">
         <!-- фото -->
-        <!-- <ProductViewPhotos
+        <ProductViewPhotos
           class="item-popup__photos"
           :photos="photos"
-          :photo-id.sync="photo"
+          v-model:photo-id="photo"
           :title="product.title"
           :gallery-visible="false"
           main-photo-height="100%"
-        /> -->
+        />
 
         <!-- параметры -->
         <div class="item-popup__params">
@@ -29,7 +29,7 @@
 
           <!-- количество -->
           <div class="item__row item__row--center">
-            <!-- <BaseCounter min-val="1" v-model="amount" /> -->
+            <BaseCounter min-val="1" v-model:amount="amount" />
             <!-- цена -->
             <b v-if="!productLoading" class="item__price item-popup__price"
               >{{ numberFormat(product.price) }} ₽</b
@@ -78,15 +78,15 @@
 
 <script>
 import Popup from '@/components/base/BasePopup.vue';
-import SpinnerSpring from '../base/spinners/SpinnerSpring.vue';
-// import ProductViewPhotos from './ProductViewPhotos.vue';
-import functionsMixin from '@/mixins/functionsMixin';
-import { apiLoadProduct } from '@/api/api';
-import { errors } from '@/mixins/dictsMixin';
-// import BaseCounter from '@/components/base/BaseCounter.vue';
+import SpinnerSpring from '@/components/base/spinners/SpinnerSpring.vue';
+import ProductViewPhotos from './ProductViewPhotos.vue';
+import BaseCounter from '@/components/base/BaseCounter.vue';
 import ColorsSelect from '@/components/products/selects/ProductColorsSelect.vue';
 import SizesSelect from '@/components/products/selects/ProductSizesSelect.vue';
+import functionsMixin from '@/mixins/functionsMixin';
 import photosGallery from '@/helpers/colorsPhotosGallery';
+import { apiLoadProduct } from '@/api/api';
+import { errors } from '@/mixins/dictsMixin';
 
 export default {
   name: 'PopupProductView',
@@ -219,8 +219,8 @@ export default {
   components: {
     Popup,
     SpinnerSpring,
-    // ProductViewPhotos,
-    // BaseCounter,
+    ProductViewPhotos,
+    BaseCounter,
     ColorsSelect,
     SizesSelect,
   },
