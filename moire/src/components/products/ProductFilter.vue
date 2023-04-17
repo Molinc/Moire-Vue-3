@@ -215,6 +215,7 @@ export default {
       this.$emit('update:seasonIds', this.currentSeasonIds);
       this.$emit('update:colorIds', this.currentColorIds);
       this.$emit('update:page', 1); // ! добавил переброс на 1ю страницу
+      this.$emit('submit', true);
     },
     reset() {
       this.currentPriceFrom = 0;
@@ -233,6 +234,7 @@ export default {
       this.$emit('update:materialIds', this.currentMaterialIds);
       this.$emit('update:seasonIds', this.currentSeasonIds);
       this.$emit('update:colorIds', this.currentColorIds);
+      this.$emit('reset', true);
     },
     loadCategories() {
       apiLoadProductCategories()

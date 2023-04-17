@@ -4,7 +4,7 @@
       <ProductBreadcrumbs :crumbs="breadcrumbsData" />
     </div>
 
-    <Spinner :visible="productLoading" size="large" />
+    <SpinnerSpring :visible="productLoading" size="large" />
 
     <section class="item">
       <!-- фотографии -->
@@ -28,10 +28,10 @@
           >
             <!-- блок добавления в корзину -->
             <div class="item__row item__row--center">
-              <BaseCounter min-val="1" v-model="amount" />
+              <BaseCounter min-val="1" v-model:amount="amount" />
 
               <b v-if="!productLoading" class="item__price">
-                <!-- {{ product.price | numberFormat }} ₽ -->
+                {{ numberFormat(product.price) }} ₽
               </b>
             </div>
 
@@ -50,10 +50,11 @@
             >
               <span>
                 В корзину
-                <Spinner
+                <SpinnerSpring
                   class="spinner spinner--basket-appending"
                   :visible="productAdding"
                   size="medium"
+                  color="white"
                 />
               </span>
             </button>
@@ -155,17 +156,17 @@
 </style>
 
 <script>
-// import ProductBreadcrumbs from '@/components/base/BaseBreadcrumbs.vue';
-// import numberFormat from '@/helpers/numberFormat';
-// import BaseCounter from '@/components/base/BaseCounter.vue';
-// import Spinner from '@/components/base/BaseSpinner.vue';
+import ProductBreadcrumbs from '@/components/base/BaseBreadcrumbs.vue';
+import BaseCounter from '@/components/base/BaseCounter.vue';
+import SpinnerSpring from '@/components/base/spinners/SpinnerSpring.vue';
 import { mapActions } from 'vuex';
 import { errors } from '@/mixins/dictsMixin.js';
-// import ProductViewPhotos from '@/components/products/ProductViewPhotos.vue';
-// import ColorsSelect from '@/components/products/selects/ProductColorsSelect.vue';
-// import SizesSelect from '@/components/products/selects/ProductSizesSelect.vue';
-// import photosGallery from '@/helpers/colorsPhotosGallery';
+import ProductViewPhotos from '@/components/products/ProductViewPhotos.vue';
+import ColorsSelect from '@/components/products/selects/ProductColorsSelect.vue';
+import SizesSelect from '@/components/products/selects/ProductSizesSelect.vue';
+import photosGallery from '@/helpers/colorsPhotosGallery';
 import { apiLoadProduct } from '@/api/api';
+import functionsMixin from '@/mixins/functionsMixin';
 
 export default {
   name: 'ProductView',
@@ -223,7 +224,7 @@ export default {
     },
     photos() {
       if (!this.product?.colors?.length) return [];
-      return []; // photosGallery(this.product.colors, this.colorId);
+      return photosGallery(this.product.colors, this.colorId);
     },
     productGallery() {
       if (!this.product?.colors?.length) return [];
@@ -247,12 +248,12 @@ export default {
     },
   },
   components: {
-    // ProductBreadcrumbs,
-    // BaseCounter,
-    // Spinner,
-    // ProductViewPhotos,
-    // ColorsSelect,
-    // SizesSelect,
+    ProductBreadcrumbs,
+    BaseCounter,
+    SpinnerSpring,
+    ProductViewPhotos,
+    ColorsSelect,
+    SizesSelect,
   },
   methods: {
     ...mapActions(['addProductToCart', 'addNotification']),
@@ -332,13 +333,11 @@ export default {
         });
     },
   },
-  // filters: {
-  //   numberFormat,
-  // },
+  mixins: [functionsMixin],
   watch: {
     product() {
       // здесь нужен наблюдатель, т.к. продукт требует времени для загрузки
-      this.color = this.$route.params.color || this.product.colors[0].id; // цвет берется из параметра маршрутизации
+      this.color = Number(this.$route.query.color) || this.product.colors[0].id; // цвет берется из параметра маршрутизации
       this.size = this.product.sizes[0].id; // первый доступный размер
     },
     // ! наблюдаем за динамическим сегментом роутера - за его параметрами!
@@ -351,6 +350,12 @@ export default {
 
     // -----------------------------------------------------
     color() {
+      // сменить параметры запроса в url
+      if (this.$route.query.color != this.color) {
+        this.$router.replace({
+          query: { color: this.color },
+        });
+      }
       // список фото выбранного цвета
       const newColorPhotos = this.photos.filter((value) => {
         return value.color === this.color;

@@ -34,17 +34,25 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL), // ! ОБЯЗАТЕЛЬНО в адрес для статичных ресурсов (напр., link:css в index.html) подставлять <%= BASE_URL %>
   routes,
   scrollBehavior(to, from, savedPosition) {
-    // возвращаем требуемую позицию прокрутки
-    if (to.hash) {
-      return {
-        selector: to.hash,
+    // применить позицию, если есть сохраненная позиция, либо если это изменение параметров одной и той же страницы
+    if (savedPosition || from.path == to.path) {
+      const position = {
+        left: savedPosition?.left,
+        top: savedPosition?.top,
+        // добавить плавную прокрутку с нужному месту
         behavior: 'smooth',
       };
+
+      return new Promise((resolve) => {
+        // чтобы все нужные DOM-элементы успели отрендериться, добавляем таймаут
+        setTimeout(() => {
+          resolve(position);
+        }, 1000);
+      });
     }
-    if (savedPosition) {
-      return savedPosition;
-    }
-    return { x: 0, y: 0 };
+
+    // в остальных случаях отмотать наверх
+    return { left: 0, top: 0 };
   },
 });
 

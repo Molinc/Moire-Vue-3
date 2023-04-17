@@ -9,10 +9,10 @@
     />
 
     <!-- ! html-способ маршрутизации -->
-    <!-- TODO! все прочие параметры, не учитываемые в маршрутизаторе, в частности цвет, отправляем state! учесть это на странице ProductView.vue! -->
+    <!-- ! все прочие параметры, не учитываемые в маршрутизаторе, в частности цвет, отправляем в query! -->
     <router-link
       class="catalog__link"
-      :to="{ name: 'product', params: { id: product.id }, state: { color } }"
+      :to="{ name: 'product', params: { id: product.id }, query: { color } }"
     >
       <div class="catalog__pic">
         <img :src="productImage" :alt="product.title" />

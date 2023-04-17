@@ -18,12 +18,14 @@
         v-model:season-ids="filterSeasonIds"
         v-model:color-ids="filterColorIds"
         v-model:page="page"
+        @submit="updateUrlParams('submit')"
+        @reset="updateUrlParams('reset')"
       />
 
       <section class="catalog">
         <PageProductsSelect v-model="productsPerPage" />
 
-        <SpinnerSpring :visible="productsLoading" size="medium" />
+        <SpinnerSpring :visible="productsLoading" size="large" />
 
         <ProductList :products="products" />
 
@@ -54,7 +56,7 @@ export default {
       productsLoadingErrorCode: null,
       filterPriceFrom: 0,
       filterPriceTo: 0,
-      filterCategoryId: this.$route.params.categoryId || 0,
+      filterCategoryId: this.$route.query.categoryId || 0, // TODO! проверить вхождение параметра в список доступных категорий!!!
       filterMaterialIds: [],
       filterSeasonIds: [],
       filterColorIds: [],
@@ -97,6 +99,28 @@ export default {
   },
   methods: {
     ...mapActions(['addNotification']),
+
+    updateUrlParams(operation) {
+      if (operation === 'reset') {
+        this.$router.replace({ query: {} });
+        return;
+      }
+
+      // обновить параметры запроса в url
+      let paramsChanged = false;
+      const queryNew = {};
+      // ------------------------------------------------------------
+
+      // проверка изменения категории
+      if (this.$route.query.categoryId != this.filterCategoryId) {
+        paramsChanged = true;
+        if (this.filterCategoryId) queryNew.categoryId = this.filterCategoryId;
+      }
+      // аналогично можно сделать проверки и по всем остальным фильтрам ...
+
+      // ------------------------------------------------------------
+      if (paramsChanged) this.$router.replace({ query: queryNew });
+    },
 
     cartProductItems(productId) {
       let items =
