@@ -91,6 +91,7 @@ import { errors } from '@/mixins/dictsMixin';
 export default {
   name: 'PopupProductView',
   props: ['productId', 'colorId'],
+  emits: ['cancelled', 'added:productToCart'],
   data() {
     return {
       color: null,
@@ -176,7 +177,7 @@ export default {
             });
           })
           .finally(() => this.stopLoading());
-      }, 500);
+      }, 0);
     },
   },
   watch: {

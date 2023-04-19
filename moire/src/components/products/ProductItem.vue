@@ -82,8 +82,8 @@
 
 <script>
 import CartAddButton from '@/components/cart/buttons/CartAddButton.vue';
-import ProductItemPopup from '@/components/products/ProductItemPopup.vue';
 import functionsMixin from '@/mixins/functionsMixin';
+import { defineAsyncComponent } from 'vue';
 import { mapActions } from 'vuex';
 
 const defaultImageSrc = require('@/assets/no-photo.jpg'); // использование фото по умолчанию
@@ -182,7 +182,12 @@ export default {
   },
   components: {
     CartAddButton,
-    ProductItemPopup,
+    // асинхронное подключение компонентов (по мере открытия модального окна)
+    ProductItemPopup: defineAsyncComponent({
+      loader: () => import('@/components/products/ProductItemPopup.vue'),
+      delay: 0,
+      loadingComponent: () => '<h2>Загрузка...</h2>',
+    }),
   },
   mixins: [functionsMixin],
   mounted() {

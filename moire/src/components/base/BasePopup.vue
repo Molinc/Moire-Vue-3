@@ -1,33 +1,36 @@
 <template>
-  <div class="popup" ref="popup">
-    <div class="popup__wrapper">
-      <div class="popup__header">
-        <span>Выбор параметров товара</span>
-        <span class="popup__header-close" title="Закрыть" @click="cancel"
-          ><i class="material-icons">close</i></span
-        >
-      </div>
+  <!-- ! модалку размещаем в телепорте на главной странице (см. App.vue в конце) -->
+  <teleport to="#teleport-target">
+    <div class="popup" ref="popup">
+      <div class="popup__wrapper">
+        <div class="popup__header">
+          <span>Выбор параметров товара</span>
+          <span class="popup__header-close" title="Закрыть" @click="cancel"
+            ><i class="material-icons">close</i></span
+          >
+        </div>
 
-      <div class="popup__content">
-        <slot></slot>
-      </div>
+        <div class="popup__content">
+          <slot></slot>
+        </div>
 
-      <div class="popup__footer">
-        <button
-          class="button button--second popup__btn popup__btn--close"
-          @click="cancel"
-        >
-          Закрыть
-        </button>
-        <button
-          class="button button--primery popup__btn popup__btn--submit"
-          @click="submit"
-        >
-          {{ submitButtonTitle || 'ОК' }}
-        </button>
+        <div class="popup__footer">
+          <button
+            class="button button--second popup__btn popup__btn--close"
+            @click="cancel"
+          >
+            Закрыть
+          </button>
+          <button
+            class="button button--primery popup__btn popup__btn--submit"
+            @click="submit"
+          >
+            {{ submitButtonTitle || 'ОК' }}
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  </teleport>
 </template>
 
 <style lang="sass">
@@ -95,12 +98,16 @@
 export default {
   name: 'ProductItemPopup',
   props: ['title', 'submitButtonTitle'],
+  emits: ['submit', 'cancel'],
   methods: {
     stopScrolling() {
+      document.body.style.paddingRight =
+        window.innerWidth - document.documentElement.clientWidth + 'px'; // чтобы не происходил визуальный скачок интерфейса
       document.body.style.overflow = 'hidden';
     },
     startScrolling() {
       document.body.style.overflow = 'auto';
+      document.body.style.paddingRight = 'null';
     },
     cancel() {
       this.startScrolling();
