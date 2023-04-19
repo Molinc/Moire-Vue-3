@@ -23,11 +23,11 @@ const routes = [
   //   name: 'orderInfo',
   //   component: () => import('@/views/OrderInfoView.vue'),
   // },
-  // {
-  //   path: '/*',
-  //   name: 'notFound',
-  //   component: () => import('@/views/NotFoundView.vue'),
-  // },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: () => import('@/views/NotFoundView.vue'),
+  },
 ];
 
 const router = createRouter({
