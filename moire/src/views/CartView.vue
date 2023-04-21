@@ -1,19 +1,19 @@
 <template>
   <main class="content container">
     <!-- хлебные крошки и заголовок с кол-вом товаров -->
-    <!-- <div class="content__top">
-      <ProductBreadcrumbs :crumbs="breadcrumbsData" />
+    <div class="content__top">
+      <Breadcrumbs :crumbs="breadcrumbsData" />
 
       <div class="content__row">
         <h1 class="content__title">Корзина</h1>
         <span class="content__info">
-          {{ productsCount | countProductsString }}
+          {{ countProductsString(productsCount) }}
         </span>
       </div>
     </div>
 
     <section class="cart">
-      <Spinner :visible="cartLoading" size="large" />
+      <SpinnerSpring :visible="cartLoading" size="large" />
 
       <form class="cart__form form" action="#" method="POST">
         <div class="cart__field">
@@ -27,42 +27,45 @@
             Мы&nbsp;посчитаем стоимость доставки на&nbsp;следующем этапе
           </p>
           <p class="cart__price">
-            Итого: <span>{{ totalPrice | numberFormat }} ₽</span>
+            Итого: <span>{{ numberFormat(totalPrice) }} ₽</span>
           </p>
 
-          <router-link
-            tag="button"
-            :to="{ name: 'order' }"
-            class="cart__button button button--primery"
-            type="submit"
-            :style="`display:${buttonCreateOrderDisplay}`"
-          >
-            Оформить заказ
+          <router-link :to="{ name: 'order' }">
+            <button
+              class="cart__button button button--primery"
+              type="submit"
+              :style="`display:${buttonCreateOrderDisplay}`"
+            >
+              Оформить заказ
+            </button>
           </router-link>
         </div>
       </form>
-    </section> -->
+    </section>
   </main>
 </template>
 
 <script>
-// import ProductBreadcrumbs from '@/components/base/BaseBreadcrumbs.vue';
-// import { countProductsString } from '@/helpers/productCounters';
-import { mapGetters, mapState } from 'vuex';
-// import CartItem from '@/components/cart/CartItem.vue';
-// import Spinner from '@/components/base/BaseSpinner.vue';
-// import numberFormat from '@/helpers/numberFormat';
+import Breadcrumbs from '@/components/base/BaseBreadcrumbs.vue';
+import { mapGetters } from 'vuex';
+import CartItem from '@/components/cart/CartItem.vue';
+import SpinnerSpring from '@/components/base/spinners/SpinnerSpring.vue';
+import functionsMixin from '@/mixins/functionsMixin';
 
 export default {
   name: 'CartView',
-  // components: { ProductBreadcrumbs, CartItem, Spinner },
+  components: {
+    Breadcrumbs,
+    SpinnerSpring,
+    CartItem,
+  },
   computed: {
     ...mapGetters({
       products: 'cartDetailProducts',
       productsCount: 'cartProductsCount',
       totalPrice: 'cartTotalPrice',
     }),
-    ...mapState(['cartLoading', 'cartLoadingFailed']),
+    ...mapGetters(['cartLoading', 'cartLoadingFailed']),
     breadcrumbsData() {
       return [
         {
@@ -80,9 +83,6 @@ export default {
       return 'inherit';
     },
   },
-  filters: {
-    // countProductsString,
-    // numberFormat,
-  },
+  mixins: [functionsMixin],
 };
 </script>

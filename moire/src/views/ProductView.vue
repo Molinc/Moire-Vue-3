@@ -28,7 +28,7 @@
           >
             <!-- блок добавления в корзину -->
             <div class="item__row item__row--center">
-              <BaseCounter min-val="1" v-model:amount="amount" />
+              <BaseCounter min-val="1" v-model:amount.number="amount" />
 
               <b v-if="!productLoading" class="item__price">
                 {{ numberFormat(product.price) }} ₽

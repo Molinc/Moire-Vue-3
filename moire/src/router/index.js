@@ -13,11 +13,11 @@ const routes = [
     name: 'cart',
     component: () => import('@/views/CartView.vue'),
   },
-  // {
-  //   path: '/order/',
-  //   name: 'order',
-  //   component: () => import('@/views/OrderView.vue'),
-  // },
+  {
+    path: '/order/',
+    name: 'order',
+    component: CatalogView, //() => import('@/views/OrderView.vue'),
+  },
   // {
   //   path: '/order/:id',
   //   name: 'orderInfo',

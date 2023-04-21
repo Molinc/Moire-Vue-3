@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 import { moduleConfig } from './config';
 import { moduleNotifications } from './notifications';
-// import { moduleOrders } from './orders';
+import { moduleOrders } from './orders';
 import { moduleCart } from './cart';
 
 export default createStore({
@@ -12,7 +12,7 @@ export default createStore({
   modules: {
     config: moduleConfig,
     notifications: moduleNotifications,
-    // orders: moduleOrders,
+    orders: moduleOrders,
     cart: moduleCart,
   },
 });
