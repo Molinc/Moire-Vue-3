@@ -33,5 +33,12 @@ export default {
       }
       return `${cnt} товаров`;
     },
+
+    deliveryFormat(deliveryType) {
+      // параметр - объект типа доставки { id, title }
+      return deliveryType?.id === 1
+        ? 'Бесплатно'
+        : `${deliveryType?.price || 0} ₽`;
+    },
   },
 };
