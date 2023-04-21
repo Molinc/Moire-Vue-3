@@ -73,7 +73,7 @@
         </div>
 
         <div class="cart__block">
-          <!-- <CartContent :cart-info="products" :delivery="deliveryCaption" /> -->
+          <CartContent :cart-info="products" :delivery="deliveryCaption" />
           <button
             class="cart__button button button--primery button__order-create"
             type="submit"
@@ -84,6 +84,7 @@
                 class="spinner spinner--creating-order"
                 :visible="orderCreating"
                 size="medium"
+                color="white"
               />
             </span>
           </button>
@@ -123,7 +124,7 @@ import ProductBreadcrumbs from '@/components/base/BaseBreadcrumbs.vue';
 import BaseFormText from '@/components/base/forms/BaseFormText.vue';
 import BaseFormTextArea from '@/components/base/forms/BaseFormTextArea.vue';
 import BaseFormPhone from '@/components/base/forms/BaseFormPhone.vue';
-// import CartContent from '@/components/cart/CartContent.vue';
+import CartContent from '@/components/cart/CartContent.vue';
 import { mapGetters, mapActions } from 'vuex';
 import DeliveriesRadioInputs from '@/components/radios/DeliveriesRadioInputs.vue';
 import PaymentsRadioInputs from '@/components/radios/PaymentsRadioInputs.vue';
@@ -247,7 +248,7 @@ export default {
     ProductBreadcrumbs,
     BaseFormText,
     BaseFormTextArea,
-    // CartContent,
+    CartContent,
     DeliveriesRadioInputs,
     PaymentsRadioInputs,
     BaseFormPhone,

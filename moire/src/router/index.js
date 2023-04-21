@@ -18,11 +18,11 @@ const routes = [
     name: 'order',
     component: () => import('@/views/OrderView.vue'),
   },
-  // {
-  //   path: '/order/:id',
-  //   name: 'orderInfo',
-  //   component: () => import('@/views/OrderInfoView.vue'),
-  // },
+  {
+    path: '/order/:id',
+    name: 'orderInfo',
+    component: () => import('@/views/OrderInfoView.vue'),
+  },
   {
     path: '/:pathMatch(.*)*',
     name: 'notFound',
