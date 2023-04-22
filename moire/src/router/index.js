@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import CatalogView from '@/views/CatalogView.vue';
 
 const routes = [
@@ -31,7 +31,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL), // ! ОБЯЗАТЕЛЬНО в адрес для статичных ресурсов (напр., link:css в index.html) подставлять <%= BASE_URL %>
+  history: createWebHashHistory(process.env.BASE_URL), // ! ОБЯЗАТЕЛЬНО в адрес для статичных ресурсов (напр., link:css в index.html) подставлять <%= BASE_URL %>
   routes,
   scrollBehavior(to, from, savedPosition) {
     // применить позицию, если есть сохраненная позиция, либо если это изменение параметров одной и той же страницы
